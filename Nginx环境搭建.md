@@ -99,6 +99,57 @@ server {
 - /etc/nginx/sites-available/: 可存储每个站点服务器块的目录。除非将Nginx连接到sites-enabled目录，否则Nginx不会使用此目录中的配置文件。通常，所有服务器配置都在此目录中完成，然后通过链接到其他目录启用
 - /etc/nginx/sites-enabled/: 存储启用的每个站点服务器块的目录，通常，这些是通过链接到sites-available目录中的配置文件创建的
 - /etc/nginx/snippets: 这个目录包含可以包含在Nginx配置其他地方的配置片段，可重复配置的片段可以重构为片段
-
 - /var/log/nginx/access.log: 除非Nginx配置为其他方式，否则每个对您的Web服务器的请求都会记录在此日志文件中
 - /var/log/nginx/error.log: 任何Nginx错误都会记录在这个日志中
+
+##### nginx.conf完整配置
+
+```nginx
+#user nobody
+worker_processes 1;
+
+events {
+	worker_connections 1024;
+}
+
+http {
+	include		mime.types;
+	default_type application/octet-atream;
+	sendfile 	on;
+
+	keepalive_timeout	65;
+
+	grip on;
+	
+	server {
+		listen		80;
+		server_name manage.leyou.com;
+
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-Server $host;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+		location / {		# 拦截域名下的所有路径
+			proxy_pass http://10.141.7.121:9001;	# 主机地址下的9001端口
+			proxy_connect_timeout 600;
+			proxy_read_timeout 600;
+		}
+	}
+
+	server {
+		listen 		80;
+		server_name api.leyou.com;
+
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+		location / {
+			proxy_pass http://10.141.7.121:10010;
+			proxy_connect_timeout 600;
+			proxy_read_timeout 600;
+		}
+	}
+}
+```
+

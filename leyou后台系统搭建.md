@@ -128,3 +128,15 @@ ribbon:
   MaxAutoRetriesNextServer: 0 # 切换服务重试次数
 ```
 
+#### Unable to start embedded Tomcat 问题
+
+- java8及之前内置了jaxb-api包，但是java9之后引用，需要手动导入
+
+```xml
+<dependency>
+  <groupId>javax.xml.bind</groupId>
+  <artifactId>jaxb-api</artifactId>
+  <version>2.3.1</version>
+</dependency>
+```
+
