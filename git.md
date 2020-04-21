@@ -17,3 +17,7 @@ git pull origin master --allow-unrelated-histories
 ##### 将本地内容一并提交到远程仓库
 git push origin master:master
 ***
+
+##### 强制将本地仓库推送到远程仓库
+git push -f origin master
+***
