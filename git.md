@@ -21,5 +21,5 @@ git push origin master:master
 git push -f origin master
 ***
 ##### 将文件移出本地仓库
-git checkout -- <file>
+git checkout -- &ltfile&gt
 ***
